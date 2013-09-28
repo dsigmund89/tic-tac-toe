@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>David's Tic-Tac-Toe</title>
+	<meta charset="utf-8">
+<script>
+
+var playerImage = new Image();
+playerImage.src = "x.png";
+
+var computerImage = new Image();
+computerImage.src = "o.png";
+
+// Hold all the moves on the board
+var board = new Array();
+
+var BOARD_SIZE = 9;
+var UNOCCUPIED = ' ';
+var HUMAN_PLAYER = 'X';
+var COMPUTER_PLAYER = 'O';
+var countPM = 0;
+var countCM = 0;
+var count = 0;
+
+// Start a new game by changing all the squares to blank.png
+function NewGame()
+{
+	countPM = 0;
+	countCM = 0;
+	for (i = 0; i < BOARD_SIZE; i++)
+	{
+		board[i] = UNOCCUPIED;
+		document.images[i].src = "blank.png";
+	}
+	
+	document.getElementById("turnInfo").innerHTML = "Your turn.";
+}
+function Pause()
+{
+	timer = setTimeout("MakeComputerMove()", 1000);
+	return false;
+}
+// This function is triggered by the user clicking on the game board
+function MakeMove(e)
+{		
+	// Determine the position in the array from the square's ID
+	if(!GameOver())
+	{
+		var pos = parseInt(e.target.id);
+			if((board[pos] == UNOCCUPIED) && countPM == countCM)
+			{
+				board[pos] = HUMAN_PLAYER;
+				document.images[pos].src = playerImage.src;
+				
+				countPM++;
+				
+				if (!GameOver())			
+				{
+					Pause();
+					
+					if (!GameOver())
+					{
+						document.getElementById("turnInfo").innerHTML = "Computer's turn...";
+					}
+				}	
+			}
+	}	
+}
+
+// Generate a random move for the computer
+function MakeComputerMove()
+{
+	document.getElementById("turnInfo").innerHTML = "Your turn.";
+	// Keep count of how many times we try to pick an unoccuppied slot so we avoid
+	// accidentally getting stuck in the loop
+	count = 0;
+	do
+	{
+		move = Math.floor(Math.random() * BOARD_SIZE);
+		count++;
+	} 
+	while ((board[move] == HUMAN_PLAYER || board[move] == COMPUTER_PLAYER) && count < 100);
+
+	if (count == 100)
+	{
+		alert("There's something wrong... computer can't find an open move.");
+	}	
+	else
+	{
+		board[move] = COMPUTER_PLAYER;
+		document.images[move].src = computerImage.src;
+	}
+	countCM++;
+	GameOver();
+}
+
+// Check for a winner.  Return
+//   0 if no winner or tie yet
+//   1 if it's a tie
+//   2 if X won
+//   3 if O won
+function CheckForWinner() 
+{
+	// Check for horizontal wins
+	for (i = 0; i <= 6; i += 3) 
+	{
+		if (board[i] == HUMAN_PLAYER && board[i+1] == HUMAN_PLAYER && board[i+2] == HUMAN_PLAYER)
+			return 2;
+		if (board[i] == COMPUTER_PLAYER && board[i+1] == COMPUTER_PLAYER && board[i+2] == COMPUTER_PLAYER)
+			return 3;
+	}
+
+	// Check for vertical wins
+	for (i = 0; i <= 2; i++) 
+	{
+		if (board[i] == HUMAN_PLAYER && board[i+3] == HUMAN_PLAYER && board[i+6] == HUMAN_PLAYER)
+			return 2;
+		if (board[i] == COMPUTER_PLAYER && board[i+3] == COMPUTER_PLAYER && board[i+6] == COMPUTER_PLAYER)
+			return 3;
+	}
+
+	// Check for diagonal wins
+	if ((board[0] == HUMAN_PLAYER && board[4] == HUMAN_PLAYER && board[8] == HUMAN_PLAYER) ||
+		(board[2] == HUMAN_PLAYER && board[4] == HUMAN_PLAYER && board[6] == HUMAN_PLAYER))
+		return 2;
+	if ((board[0] == COMPUTER_PLAYER && board[4] == COMPUTER_PLAYER && board[8] == COMPUTER_PLAYER) ||
+		(board[2] == COMPUTER_PLAYER && board[4] == COMPUTER_PLAYER && board[6] == COMPUTER_PLAYER))
+		return 3;
+
+	// Check for tie
+	for (i = 0; i < BOARD_SIZE; i++)
+	{
+		// If we find a number, then no one has won yet
+		if (board[i] != HUMAN_PLAYER && board[i] != COMPUTER_PLAYER)
+			return 0;
+	}
+
+	// If we make it through the previous loop, all places are taken, so it's a tie
+	return 1;
+}
+
+
+// This function calls CheckForWinner() to determine if the game is over or not.  If
+// the game is over, it displays who won and returns true, otherwise it returns false.
+function GameOver()
+{
+	if(CheckForWinner() == 0)
+	{
+		return false;
+	}
+	else if(CheckForWinner() == 1)
+	{
+		document.getElementById("turnInfo").innerHTML = "IT'S A TIE!!";
+		return true;
+	}
+	else if(CheckForWinner() == 2)
+	{
+		document.getElementById("turnInfo").innerHTML = "YOU WON!!";
+		return true;
+	}
+	else if(CheckForWinner() == 3)
+	{
+	
+		document.getElementById("turnInfo").innerHTML = "COMPUTER WON!!";
+		return true;
+	}
+}
+
+// This function is called when the web page finishes loading
+function start()
+{
+    // Register all event listeners
+	for (var i = 0; i < 9; i++)
+		document.getElementById(i + "square").addEventListener("click", MakeMove, false);
+	
+	document.getElementById("newgame").addEventListener("click", NewGame, false);
+	
+	NewGame();
+}
+
+addEventListener("load", start, false);
+</script>
+
+</head>
+
+<body>
+
+<h1 style="text-align:center; width:280;">Tic-Tac-Toe</h1>
+
+<img src="blank.png" width="75" height="71" id="0square" style="position:absolute; left:10px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="1square" style="position:absolute; left:110px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="2square" style="position:absolute; left:210px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="3square" style="position:absolute; left:10px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="4square" style="position:absolute; left:110px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="5square" style="position:absolute; left:210px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="6square" style="position:absolute; left:10px; top:250px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="7square" style="position:absolute; left:110px; top:250px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="8square" style="position:absolute; left:210px; top:250px; z-index:1" />
+
+<img src="board.png" id="gameBoard" width="270" height="270"  
+ style="position:absolute; left:10px; top:50px; z-index:0" />
+ 
+<p id="turnInfo" style="text-align:center; width:280px; position:absolute; left:5px; top:350px; z-index:1" >
+TURN INFO
+</p>
+
+<form>
+	<input type="button" value="New Game" id="newgame" 
+		style="position:absolute; left:100px; top:400px; z-index:1"/>
+</form>
+ 
+
+</body>
+</html>

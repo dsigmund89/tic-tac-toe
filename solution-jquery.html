@@ -1,0 +1,59 @@
+<html>
+<head>
+<script src="http://cs.harding.edu/fmccown/jquery.js"></script>
+
+<script type = "text/javascript" src = "ttt-jquery.js"></script>
+
+<style type = "text/css">
+	.human		{ color: red; }
+	.computer	{ color: blue; }
+	.changeZ	{ z-index: 2; }
+	.resetZ		{ z-index: -1; }
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center; width:280;">Tic-Tac-Toe</h1>
+
+<img src="blank.png" width="75" height="71" id="0square" style="position:absolute; left:10px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="1square" style="position:absolute; left:110px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="2square" style="position:absolute; left:210px; top:50px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="3square" style="position:absolute; left:10px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="4square" style="position:absolute; left:110px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="5square" style="position:absolute; left:210px; top:150px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="6square" style="position:absolute; left:10px; top:250px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="7square" style="position:absolute; left:110px; top:250px; z-index:1" />
+<img src="blank.png" width="75" height="71" id="8square" style="position:absolute; left:210px; top:250px; z-index:1" />
+
+<img src="board.png" id="gameBoard" width="270" height="270"  
+ style="position:absolute; left:10px; top:50px; z-index:0" />
+
+<canvas id = "myCanvas" width="270" height="270" 
+style="position:absolute; left:10px; top:50px"></canvas>
+ 
+<p id="turnInfo" class style="text-align:center; width:280px; position:absolute; left:5px; top:350px; z-index:1">
+TURN INFO
+</p>
+
+<form>
+	<input type="button" value="New Game" id="newgame" 
+		style="position:absolute; left:100px; top:400px; z-index:1"/>
+</form>
+<p id = "HumanWins" style = "position:absolute; top:450px; z-index:1">
+Human Wins: 0
+</p>
+
+<p id = "ComputerWins" style = "position:absolute; left:170px; width 300px; top:450px; z-index:1">
+ComputerWins: 0
+</p>
+
+<audio id="lose">
+  <source src="lose.wav" type="audio/wav" preload="auto">
+</audio>
+
+<audio id="win">
+  <source src="cheer.wav" type="audio/wav" preload="auto">
+</audio>
+
+</body>
+</html>
